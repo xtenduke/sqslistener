@@ -60,7 +60,7 @@ pub fn load_config() -> Result<Config, Box<dyn Error>> {
     let data: Data = match toml::from_str(&file_content) {
         Ok(config) => config,
         Err(e) => {
-            error!("Failed parsing config file {}, is it valid toml?", &path.to_str().unwrap_or("err"));
+            error!("Failed parsing config file {}, is it valid toml? Does it contain a [config] block?", &path.to_str().unwrap_or("err"));
             debug!("{:?}", e);
             return Err(e.into());
         }
