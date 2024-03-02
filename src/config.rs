@@ -11,12 +11,12 @@ use url::Url;
  * poll_ms=30000
  * script_path=/home/me/deployment/deploy.sh
  */
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize)]
 struct Data {
     config: Config,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize)]
 pub struct Config {
     pub queue_url: String,
     pub poll_ms: i32,
