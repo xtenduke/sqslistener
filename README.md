@@ -14,5 +14,4 @@ TODO:
 - better error logging
 - Less cloning
 - Usage instructions
-- Config validation
 - Decide on windows support

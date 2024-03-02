@@ -1,8 +1,9 @@
 use serde_derive::Deserialize;
-use std::{error::Error, fs, path::PathBuf};
+use std::{error::Error, fmt, fs, path::PathBuf};
 use toml;
 use home::home_dir;
 use::log::{debug, error};
+use url::Url;
 
 /**
  * [config]
@@ -59,11 +60,61 @@ pub fn load_config() -> Result<Config, Box<dyn Error>> {
     let data: Data = match toml::from_str(&file_content) {
         Ok(config) => config,
         Err(e) => {
-            error!("Failed parsing config file {}, is it valid toml?", &path.to_str().unwrap_or("err"));
+            error!("Failed parsing config file {}, is it valid toml? Does it contain a [config] block?", &path.to_str().unwrap_or("err"));
             debug!("{:?}", e);
             return Err(e.into());
         }
     };
 
-    Ok(data.config)
+    // Manually validate
+    match validate(&data.config) {
+        Ok(_) => Ok(data.config),
+        Err(e) => {
+            error!("{}", e);
+            Err(e.into())
+        }
+    }
+}
+
+#[derive(Debug)]
+struct ValidationError {
+    message: String,
+}
+
+impl Error for ValidationError {}
+
+impl fmt::Display for ValidationError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Validation error: {}", self.message)
+    }
+}
+
+fn validate(config: &Config) -> Result<&Config, ValidationError> {
+    let mut error = String::from("");
+
+    if Url::parse(config.queue_url.as_str()).is_err() {
+        error.push_str("\"queue_url\" must be a valid url.");
+    }
+
+    if config.poll_ms < 0 {
+        if error.len() > 0 {
+            error.push_str(" ");
+        }
+        error.push_str(format!("\"poll_ms\" must be a number larger than 0 and smaller than {:?}.", i32::MAX).as_str());
+    }
+
+    if config.command.len() == 0 {
+        if error.len() > 0 {
+            error.push_str(" ");
+        }
+        error.push_str("\"command\" must be a valid string.")
+    }
+
+    if error.len() > 0 {
+        Err(ValidationError {
+            message: error 
+        })
+    } else {
+        Ok(config)
+    }
 }
