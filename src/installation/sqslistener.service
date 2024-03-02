@@ -1,0 +1,9 @@
+[Unit]
+Description=sqs listener
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/sqslistener
+
+[Install]
+WantedBy=multi-user.target
