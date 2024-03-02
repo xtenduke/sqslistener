@@ -11,7 +11,5 @@ Work in progress
 
 
 TODO:
-- better error logging
 - Less cloning
 - Usage instructions
-- Decide on windows support

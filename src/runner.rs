@@ -22,16 +22,10 @@ impl fmt::Display for CommandError {
 pub fn run_on_shell(command: &String) -> Result<(), CommandError> {
     debug!("Running command {:?}", command);
 
-    let output = if cfg!(target_os = "windows") {
-        Command::new("cmd")
-            .args(["/C", &command])
-            .output().map_err(|_| CommandError::IOError)
-    } else {
-        Command::new("sh")
-            .arg("-c")
-            .arg(&command)
-            .output().map_err(|_| CommandError::IOError)
-    };
+    let output = Command::new("sh")
+        .arg("-c")
+        .arg(&command)
+        .output().map_err(|_| CommandError::IOError);
 
     if let Ok(output) = output {
         if !output.status.success() {
