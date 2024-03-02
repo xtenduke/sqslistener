@@ -1,0 +1,18 @@
+[package]
+name = "sqslistener"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+aws-sdk-sqs = "1.13.0"
+aws-config = { version = "1.1.5", features = ["behavior-version-latest"] }
+tokio = { version = "1", features = ["full"] }
+toml = "0.8.10"
+serde = "1.0.197"
+serde_derive = "1.0.197"
+home = "0.5.9"
+argh = "0.1.12"
+env_logger = "0.11.2"
+log = "0.4.20"

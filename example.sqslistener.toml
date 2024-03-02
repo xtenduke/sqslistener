@@ -1,0 +1,4 @@
+[config]
+queue_url="https://sqs.ap-southeast-1.amazonaws.com/665627270874/sqslistener"
+poll_ms=2500
+command="say"
