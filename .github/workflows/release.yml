@@ -19,7 +19,7 @@ jobs:
         run: cargo build --release
 
       - name: Make binary Executable
-        run: chmod +x target/release/shivr
+        run: chmod +x target/release/sqslistener
 
       - name: Upload binary
         uses: actions/upload-artifact@v3
