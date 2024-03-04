@@ -1,0 +1,64 @@
+name: Release
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Release
+        run: cargo build --release
+
+      - name: Make binary Executable
+        run: chmod +x target/release/sqslistener
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqslistener-linux-x86
+          path: target/release/sqslistener
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: sqslistener-linux-x86
+          path: sqslistener-linux-x86
+
+      - name: Publish to crates.io
+        env:
+          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+        run: cargo publish --allow-dirty --token ${CRATES_TOKEN} --dry-run
+
+      - name: Rename binary for linux
+        run: |
+          mv sqslistener-linux-x86 sqslistener
+
+      - name: Zip files for release
+        run: |
+          zip -rj sqslistener-linux-x86.zip sqslistener installation/sqslistener.service installation/install.sh
+
+      - name: Github release 
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: |
+            sqslistener-linux-x86.zip
+            LICENSE
+

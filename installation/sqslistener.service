@@ -1,0 +1,11 @@
+[Unit]
+Description=sqs listener
+
+[Service]
+Type=simple
+Environment="RUST_LOG=debug,info"
+ExecStart=/usr/bin/sqslistener
+User=USER_PLACEHOLDER
+
+[Install]
+WantedBy=multi-user.target

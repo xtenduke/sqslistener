@@ -1,4 +1,4 @@
 [config]
-queue_url="https://sqs.ap-southeast-1.amazonaws.com/665627270874/sqslistener"
-poll_ms=2500
-command="say"
+queue_url="https://sqs.ap-southeast-1.amazonaws.com/<account-id>/sqslistener"
+poll_ms=30000
+command="/home/user/customcommand.sh"
