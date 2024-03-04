@@ -1,5 +1,5 @@
 use std::process::Command;
-use log::{error, debug};
+use log::{error, info};
 use std::fmt;
 
 #[derive(Debug, Clone)]
@@ -20,7 +20,7 @@ impl fmt::Display for CommandError {
 }
 
 pub fn run_on_shell(command: &String) -> Result<(), CommandError> {
-    debug!("Running command {:?}", command);
+    info!("Running command {:?}", command);
 
     let output = Command::new("sh")
         .arg("-c")
