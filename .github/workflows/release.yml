@@ -24,7 +24,7 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
-          name: sqslistener-linux-x86
+          name: sqslistener
           path: target/release/sqslistener
   release:
     needs: [build]
@@ -46,7 +46,7 @@ jobs:
 
       - name: Zip files for release
         run: |
-          zip -rj sqslistener-linux-x86.zip sqslistener-linux-x86
+          zip -rj sqslistener-linux-x86.zip sqslistener installation/sqslistener.service installation/installation.sh
 
       - name: Github release 
         uses: softprops/action-gh-release@v1
