@@ -8,7 +8,7 @@ readme = "README.md"
 homepage = "https://github.com/xtenduke/sqslistener"
 keywords = ["aws", "sqs", "cron"]
 categories = ["command-line-utilities"]
-license-file = "APACHE"
+license-file = "Apache-2.0"
 exclude = ["*.zip"]
 
 
