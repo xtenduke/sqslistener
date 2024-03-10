@@ -18,7 +18,7 @@ systemctl stop "$SERVICE_NAME"
 
 # Install service
 SERVICE_FILE_PATH="/etc/systemd/system/$SERVICE_NAME"
-sudo cp "installation/$SERVICE_NAME" "$SERVICE_FILE_PATH"
+sudo cp "installation/systemd/$SERVICE_NAME" "$SERVICE_FILE_PATH"
 
 # set username for service
 sudo sed -i "s/USER_PLACEHOLDER/$USER/g" "$SERVICE_FILE_PATH"

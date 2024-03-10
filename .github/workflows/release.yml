@@ -18,14 +18,19 @@ jobs:
       - name: Build Release
         run: cargo build --release
 
-      - name: Make binary Executable
-        run: chmod +x target/release/sqslistener
+      - name: Install cargo-deb
+        run: cargo install cargo-deb
 
-      - name: Upload binary
+      - name: Package deb
+        run: echo "DEB_PATH=$(cargo-deb)" >> $GITHUB_ENV
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sqslistener-linux-x86
-          path: target/release/sqslistener
+          path: |
+            ${{ env.DEB_PATH }}
+            target/release/sqslistener
+
   release:
     needs: [build]
     runs-on: ubuntu-latest
@@ -33,24 +38,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Download linux artifact
+      - name: Download artifacts
         uses: actions/download-artifact@v4
-        with:
-          name: sqslistener-linux-x86
-          path: sqslistener-linux-x86
 
       - name: Publish to crates.io
+        if: ${{ false }}
         env:
           CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
         run: cargo publish --allow-dirty --token ${CRATES_TOKEN} --dry-run
 
-      - name: Rename binary for linux
-        run: |
-          mv sqslistener-linux-x86 sqslistener
-
       - name: Zip files for release
         run: |
-          zip -rj sqslistener-linux-x86.zip sqslistener installation/sqslistener.service installation/install.sh
+          zip -rj sqslistener-linux-x86.zip artifact/release/sqslistener installation/systemd/sqslistener.service installation/install.sh
 
       - name: Github release 
         uses: softprops/action-gh-release@v1
@@ -60,5 +59,6 @@ jobs:
         with:
           files: |
             sqslistener-linux-x86.zip
+            artifact/debian/*
             LICENSE
 
