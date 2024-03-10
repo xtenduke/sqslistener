@@ -56,7 +56,7 @@ jobs:
 
       - name: Zip files for release
         run: |
-          zip -rj sqslistener-linux-x86.zip sqslistener installation/sqslistener.service installation/install.sh
+          zip -rj sqslistener-linux-x86.zip sqslistener installation/systemd/sqslistener.service installation/install.sh
 
       - name: Github release 
         uses: softprops/action-gh-release@v1
