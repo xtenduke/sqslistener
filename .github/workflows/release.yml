@@ -24,17 +24,13 @@ jobs:
       - name: Package deb
         run: echo "DEB_PATH=$(cargo-deb)" >> $GITHUB_ENV
 
-      - name: Upload deb
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sqslistener-x86.deb
-          path: ${{ env.DEB_PATH }}
+          path: |
+            ${{ env.DEB_PATH }}
+            target/release/sqslistener
 
-      - name: Upload binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: sqslistener-linux-x86
-          path: target/release/sqslistener
   release:
     needs: [build]
     runs-on: ubuntu-latest
@@ -57,6 +53,7 @@ jobs:
       - name: Zip files for release
         run: |
           ls -l
+          ls -l artifact
           zip -rj sqslistener-linux-x86.zip sqslistener installation/systemd/sqslistener.service installation/install.sh
 
       - name: Github release 
