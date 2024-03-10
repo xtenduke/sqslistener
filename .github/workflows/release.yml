@@ -56,6 +56,7 @@ jobs:
 
       - name: Zip files for release
         run: |
+          ls
           zip -rj sqslistener-linux-x86.zip sqslistener installation/systemd/sqslistener.service installation/install.sh
 
       - name: Github release 
