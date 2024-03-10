@@ -42,13 +42,10 @@ jobs:
         uses: actions/download-artifact@v4
 
       - name: Publish to crates.io
+        if: ${{ false }}
         env:
           CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
         run: cargo publish --allow-dirty --token ${CRATES_TOKEN} --dry-run
-
-      - name: Rename binary for linux
-        run: |
-          mv sqslistener-linux-x86 sqslistener
 
       - name: Zip files for release
         run: |
