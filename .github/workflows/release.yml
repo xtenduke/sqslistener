@@ -49,9 +49,7 @@ jobs:
 
       - name: Zip files for release
         run: |
-          ls -l
-          ls -l artifact
-          zip -rj sqslistener-linux-x86.zip release/sqslistener installation/systemd/sqslistener.service installation/install.sh
+          zip -rj sqslistener-linux-x86.zip artifact/release/sqslistener installation/systemd/sqslistener.service installation/install.sh
 
       - name: Github release 
         uses: softprops/action-gh-release@v1
@@ -61,6 +59,6 @@ jobs:
         with:
           files: |
             sqslistener-linux-x86.zip
-            debian/*
+            artifact/debian/*
             LICENSE
 
