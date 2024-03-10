@@ -61,6 +61,6 @@ jobs:
         with:
           files: |
             sqslistener-linux-x86.zip
-            debian/*.deb
+            debian/*
             LICENSE
 
