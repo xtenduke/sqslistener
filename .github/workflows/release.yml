@@ -24,12 +24,21 @@ jobs:
       - name: Package deb
         run: echo "DEB_PATH=$(cargo-deb)" >> $GITHUB_ENV
 
+      - name: Install cargo-generate-rpm
+        run: cargo install cargo-generate-rpm
+
+      - name: Package rpm
+        run: |
+          strip -s target/release/sqslistener
+          cargo generate-rpm
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           path: |
             ${{ env.DEB_PATH }}
             target/release/sqslistener
+            target/generate-rpm/*
 
   release:
     needs: [build]
@@ -60,5 +69,6 @@ jobs:
           files: |
             sqslistener-linux-x86.zip
             artifact/debian/*
+            artifact/generate-rpm/*
             LICENSE
 
