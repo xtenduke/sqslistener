@@ -32,9 +32,11 @@ A sample configuration file is provided [here](./example.sqslistener.toml)<br>
 }
 ```
 
-## Installation (systemd)
+## Installation
+Install from the provided deb or rpm packages, or install manually.
 
-#### installation.sh
+
+### Manual installation with install.sh
 From the directory you downloaded the release
 ```
 unzip sqslistener-linux-x86.zip
@@ -42,31 +44,31 @@ cd sqslistener-linux-x86
 ./install.sh
 ```
 
-### Manual install (systemd)
-From the directory you downloaded the release.<br>
-##### Installing the binary:
-```
-cd sqslistener-linux-x86
-chmod +x sqslistener
-sudo cp sqslistener /usr/bin
-```
-
-##### Adding the systemd service
-- Open the `installation/sqslistener.service` file with your favorite text editor
-- Replace the `USER_PLACEHOLDER` value with the username you want the service to be executed by
+### Adding the systemd service
+- This is not needed if you installed with the script
+- Copy this example systemd unit to `/etc/systemd/system/sqslistener.service`
+- Replace the `USER_PLACEHOLDER` value in the unit with the username you want the service to be executed by
 - `User=USER_PLACEHOLDER` becomes `User=milesobrien`
-
-Install and start the service
+- Start and enable the service
+- `sudo systemctl start sqslistener.service && sudo systemctl enable sqslistener.service`
+sqslistener.service
 ```
-sudo cp installation/sqslistener.service /etc/systemd/system/sqslistener.service
-sudo systemctl start sqslistener.service
-sudo systemctl enable sqslistener.service
+[Unit]
+Description=sqs listener
+
+[Service]
+Type=simple
+Environment="RUST_LOG=debug,info"
+ExecStart=/usr/bin/sqslistener
+User=USER_PLACEHOLDER
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 ### Logging
 View journal logs with `journalctl -f -u sqslistener`<br>
 Proper persistent log is coming
-
 
 
 # TODO:
